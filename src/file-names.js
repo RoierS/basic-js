@@ -16,26 +16,20 @@ const { NotImplementedError } = require('../extensions/index.js');
  *
  */
 function renameFiles(names) {
-  let count = {};
   let result = [];
-
   for (let i = 0; i < names.length; i++) {
     let name = names[i];
-    let suffix = '';
-    if (/\(\d+\)$/.test(name)) {
-      suffix = name.slice(name.lastIndexOf('('));
-      name = name.slice(0, name.lastIndexOf('(')).trim();
-    }
-    if (count[name] !== undefined) {
-      suffix = `(${count[name]})`;
-      names[i] = `${name}${suffix}`;
-      count[name]++;
+    if (!result.includes(name)) {
+      result.push(name);
     } else {
-      count[name] = 1;
+      let j = 1;
+      let fileName = `${name}(${j})`;
+      while (result.includes(fileName)) {
+        fileName = `${name}(${++j})`;
+      }
+      result.push(fileName);
     }
-    result.push(`${name}${suffix}`)
   }
-  
   return result;
 }
 
